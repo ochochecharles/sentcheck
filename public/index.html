@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="dark light" />
+    <meta name="theme-color" content="#0f1220" id="theme-color-meta" />
+    <title>SentCheck</title>
+    <script>
+      (function () {
+        try {
+          var saved = localStorage.getItem('theme');
+          var prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+          var theme = saved === 'light' || saved === 'dark' ? saved : prefersLight ? 'light' : 'dark';
+          document.documentElement.setAttribute('data-theme', theme);
+          var meta = document.getElementById('theme-color-meta');
+          if (meta) meta.setAttribute('content', theme === 'light' ? '#ffffff' : '#0f1220');
+        } catch (e) {}
+      })();
+    </script>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <header>
+      <div class="brand">
+        <span class="logo" aria-hidden="true">✉️</span>
+        <h1>SentCheck</h1>
+      </div>
+      <div class="header-actions">
+        <div class="sync-status" id="sync-status">Checking…</div>
+        <button
+          class="theme-toggle"
+          id="theme-toggle"
+          type="button"
+          aria-label="Toggle dark/light mode"
+          title="Toggle theme"
+        >
+          <span class="icon-sun" aria-hidden="true">☀️</span>
+          <span class="icon-moon" aria-hidden="true">🌙</span>
+        </button>
+      </div>
+    </header>
+
+    <main>
+      <section class="card" id="accounts-card">
+        <h2>Connected accounts</h2>
+        <div class="connect-buttons">
+          <button class="btn" data-connect="gmail" id="btn-gmail">Connect Gmail</button>
+          <button class="btn" data-connect="outlook" id="btn-outlook">Connect Outlook</button>
+          <button class="btn ghost" id="btn-sync">Sync now</button>
+        </div>
+        <ul class="account-list" id="account-list"></ul>
+      </section>
+
+      <section class="card" id="check-card">
+        <h2>Check before you DM</h2>
+        <form id="check-form" autocomplete="off">
+          <div class="typeahead-wrap" id="typeahead-wrap">
+            <input
+              type="text"
+              id="check-email"
+              placeholder="someone@company.com — start typing to search"
+              autocomplete="off"
+              autocapitalize="off"
+              spellcheck="false"
+              inputmode="email"
+              aria-autocomplete="list"
+              aria-expanded="false"
+              aria-controls="typeahead-list"
+              aria-haspopup="listbox"
+              role="combobox"
+            />
+            <div id="typeahead-list" class="typeahead-list hidden" role="listbox" aria-label="Search suggestions"></div>
+          </div>
+          <button class="btn" type="submit">Check</button>
+        </form>
+        <div id="check-result" class="hidden"></div>
+      </section>
+
+      <section class="card" id="recent-card">
+        <h2>Recent sends</h2>
+        <div class="table-wrap">
+          <table class="sends-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>To</th>
+                <th>Subject</th>
+                <th>Account</th>
+              </tr>
+            </thead>
+            <tbody id="recent-body"></tbody>
+          </table>
+        </div>
+        <p class="muted" id="recent-empty">No sends indexed yet. Connect an account and hit Sync.</p>
+      </section>
+    </main>
+
+    <script src="/app.js"></script>
+  </body>
+</html>
